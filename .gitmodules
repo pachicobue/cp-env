@@ -1,0 +1,6 @@
+[submodule "lib/algolib"]
+	path = lib/algolib
+	url = https://github.com/pachicobue/algolib.git
+[submodule "lib/ac-library"]
+	path = lib/ac-library
+	url = https://github.com/atcoder/ac-library
