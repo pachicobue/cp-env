@@ -1,17 +1,18 @@
-#include <bits/stdc++.h>
-#include <iostream>
-#include "internal/abbreviation.hpp"
-#include "utility/rng.hpp"
-
-// fhoweho
-// ofhaohefoa
-
+#include "utility/bin_search.hpp"
+#include "utility/printer.hpp"
+#include "utility/scanner.hpp"
 int main() {
-    int A, B;
-    std::cin >> A >> B;
-    assert(A > 0);
-    assert(B > 0);
-    std::cerr << A * B << std::endl;
-    std::cout << A + B << std::endl;
+    const auto N = in.val<int>();
+    const auto X = binSearch(N + 1, 0, [&](int x) {
+        out.el("?", x);
+        const auto s = in.val<Str>();
+        if (s[0] == '<') {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    out.el("!", X);
+
     return 0;
 }

@@ -19,8 +19,6 @@
       {
         devShells.default = pkgs.mkShell {
           packages = [
-            pkgs.cmake
-            pkgs.just
             pkgs.boost
             pkgs.clang-tools
             llvm.clang
