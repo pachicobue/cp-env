@@ -1,34 +1,70 @@
-#include <cstdio>
-#include <filesystem>
 #include <fstream>
+
+#include "internal.hpp"
 #include "utility/printer.hpp"
 #include "utility/scanner.hpp"
 
-int main(int argc, char* argv[]) {
-    assert(argc == 2);
-    std::ifstream f1(argv[1]);
-    Scanner in1{f1};
+void special(const char* input_file_name, const char* output_file_name) {
+    std::ifstream fi(input_file_name);
+    std::ifstream fo(output_file_name);
+    Scanner in{fi}, out{fo};
     Printer err{std::cerr};
-    const auto [N, X] = in1.tup<int, int>();
-    out.el(N);
-    err.el("[out]", N);
-    constexpr int Q = 10;
+}
+
+void reactive(const char* input_file_name) {
+    std::ifstream fi{input_file_name};
+    Scanner in{fi};
+    Printer err{std::cerr};
+
+    const auto N = in.val<int>();
+    const auto Ps = in.vec<int>(N);
+    const auto As = in.vec<i64>(N);
+    out.el(N), err.el("[out]", N);
+    Vec<i64> Ss(N + 1);
+    for (int i : rep(N)) {
+        Ss[i + 1] = Ss[i] + As[i];
+    }
+    auto sum = [&](int s, int t) {
+        return Ss[t] - Ss[s];
+    };
+    const int Q = N * 2;
     int QN = 0;
     while (true) {
         const auto c = in.val<char>();
         if (c == '?') {
             QN += 1;
             assert(QN <= Q);
-            const auto x = in.val<int>();
-            err.el("[in]", "?", x);
-            out.el(x < X ? "<" : ">=");
-            err.el("[out]", (x < X ? "<" : ">="));
+            auto [s, t] = in.tup<int, int>();
+            err.el("[in]", "?", s, t);
+            assert(s != t);
+            assert(1 <= s && s <= N);
+            assert(1 <= t && t <= N);
+            s--, t--;
+            int l = Ps[s], r = Ps[t];
+            if (l > r) {
+                std::swap(l, r);
+            }
+            r++;
+            out.el(sum(l, r)), err.el("[out]", sum(l, r));
         } else {
-            const auto Y = in.val<int>();
-            err.el("[in]", "!", Y);
-            assert(Y == X);
+            auto ps = in.vec<int>(N);
+            auto as = in.vec<i64>(N);
+            err.el("[in]", "!", ps, as);
+            mdSeqPlus(ps, -1);
+            assert(Ps == ps);
+            assert(As == as);
             break;
         }
+    }
+}
+
+int main(int argc, char* argv[]) {
+    if (argc == 3) {
+        special(argv[1], argv[2]);
+    } else if (argc == 2) {
+        reactive(argv[1]);
+    } else {
+        assert(false);
     }
     return 0;
 }

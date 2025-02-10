@@ -13,16 +13,19 @@
       let
         pkgs = import nixpkgs {
           inherit system;
+          config.allowUnfree = true;
         };
         llvm = pkgs.llvmPackages_19;
       in
       {
         devShells.default = pkgs.mkShell {
           packages = [
+            pkgs.python314
             pkgs.boost
             pkgs.clang-tools
             llvm.clang
             llvm.lldb
+            llvm.libllvm
           ];
         };
       }

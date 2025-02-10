@@ -1,8 +1,10 @@
 #include "utility/printer.hpp"
 #include "utility/rng.hpp"
+
 int main() {
-    const auto N = rng.val(2, 1000);
-    const auto X = rng.val(1, N);
-    out.ln(N, X);
+    constexpr int N = 1000;
+    const auto As = iotaVec(N, 1);
+    out.ln(N);
+    out.ln(As);
     return 0;
 }

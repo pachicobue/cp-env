@@ -22,9 +22,9 @@ CASEDIR := ${BUILD_DIR}/${BASE}_case
 #====================================================================================
 # Command config
 CXX := clang++
-FLAGS := -std=gnu++20 -Wall -Wextra -I${LIB_DIR}/algolib/src -I${LIB_DIR}/ac-library -DHOGEPACHI=1
-DEBUG_FLAGS := -g3 -fsanitize=undefined,address
-RELEASE_FLAGS := -O2
+FLAGS := -std=gnu++20 -Wall -Wextra -I${LIB_DIR}/algolib/src -I${LIB_DIR}/ac-library
+DEBUG_FLAGS := -g3 -fsanitize=undefined,address -DHOGEPACHI
+RELEASE_FLAGS := -O2 -DHOGEPACHI
 CPT := cpt
 BUNDLE := cpp_bundle
 #====================================================================================
@@ -38,8 +38,8 @@ help:
 	@echo "Usage:"
 	@echo "    make bd  SRC=main.cpp                                                     -- Build(Debug)                main.cpp"
 	@echo "    make br  SRC=main.cpp                                                     -- Build(Relase)               main.cpp"
-	@echo "    make rd  SRC=main.cpp                                                     -- Run(Debug)                  ${BUILD_DIR}/main.exe"
-	@echo "    make rr  SRC=main.cpp                                                     -- Run(Relase)                 ${BUILD_DIR}/main.exe"
+	@echo "    make rd  SRC=main.cpp                                                     -- Run(Debug)                  main.exe"
+	@echo "    make rr  SRC=main.cpp                                                     -- Run(Relase)                 main.exe"
 	@echo "    make tbd SRC=main.cpp                                             TL=3000 -- Batch    Test(Debug)        main.cpp"
 	@echo "    make tbr SRC=main.cpp                                             TL=3000 -- Batch    Test(Relase)       main.cpp"
 	@echo "    make tsd SRC=main.cpp                    SRC_JUDGE=main_judge.cpp TL=3000 -- Special  Test(Debug)        main.cpp w/ main_judge.cpp"
@@ -55,7 +55,7 @@ help:
 	@echo "    make hrw SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Reactive Hack(WA)  main.cpp w/ main_judge.cpp"
 	@echo "    make hrr SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Reactive Hack(RE)  main.cpp w/ main_judge.cpp"
 	@echo "    make hrt SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Reactive Hack(TLE) main.cpp w/ main_judge.cpp"
-	@echo "    make e   SRC=main.cpp                                                     -- Bundle main.cpp into ${BUILD_DIR}/main_bundled.cpp"
+	@echo "    make e   SRC=main.cpp                                                     -- Bundle                      main.cpp -> main_bundled.cpp"
 	@echo "Variable:"
 	@echo "    SRC       -- Program file          (default: main.cpp)"
 	@echo "    SRC_GI    -- Input generator file  (default: ${BASE}_gi.cpp)"
