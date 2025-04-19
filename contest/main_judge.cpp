@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include "internal.hpp"
+#include "utility/modint.hpp"
 #include "utility/printer.hpp"
 #include "utility/scanner.hpp"
 
@@ -9,6 +10,20 @@ void special(const char* input_file_name, const char* output_file_name) {
     std::ifstream fo(output_file_name);
     Scanner in{fi}, out{fo};
     Printer err{std::cerr};
+
+    auto check = [&] {
+        const auto N = in.val<i64>();
+        const auto [A, M] = out.tup<i64, i64>();
+        assert(1 <= A && A <= TEN<i64>(18));
+        assert(1 <= M && M <= TEN<i64>(18));
+        using mint = modint_dynamic<0>;
+        mint::setMod(M);
+        assert(mint(A).pow(N) == 1);
+    };
+    const auto T = in.val<int>();
+    LOOP (T) {
+        check();
+    }
 }
 
 void reactive(const char* input_file_name) {

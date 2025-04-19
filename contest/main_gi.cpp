@@ -2,9 +2,14 @@
 #include "utility/rng.hpp"
 
 int main() {
-    constexpr int N = 1000;
-    const auto As = iotaVec(N, 1);
+    out.ln(1);
+    const auto N = 200;
     out.ln(N);
-    out.ln(As);
+    for (int x : irange(-100, 100)) {
+        for (int y : irange(0, 1)) {
+            out.ln(x, y, 1000);
+        }
+    }
+
     return 0;
 }

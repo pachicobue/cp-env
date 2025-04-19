@@ -23,7 +23,7 @@ CASEDIR := ${BUILD_DIR}/${BASE}_case
 # Command config
 CXX := clang++
 FLAGS := -std=gnu++20 -Wall -Wextra -I${LIB_DIR}/algolib/src -I${LIB_DIR}/ac-library
-DEBUG_FLAGS := -g3 -fsanitize=undefined,address -DHOGEPACHI
+DEBUG_FLAGS := -g3 -fsanitize=undefined,address -fno-omit-frame-pointer -DHOGEPACHI
 RELEASE_FLAGS := -O2 -DHOGEPACHI
 CPT := cpt
 BUNDLE := cpp_bundle
