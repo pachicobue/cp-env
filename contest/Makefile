@@ -36,26 +36,48 @@ TL ?= 3000
 .PHONY: help
 help:
 	@echo "Usage:"
+	@echo "    [Clean]"
+	@echo "    make c                                                                    -- Clean all"
+	@echo "    make ct                                                                   -- Clean testcases(only generated)"
+	@echo "    make cta                                                                  -- Clean testcases(all)"
+	@echo "    [Build]"
 	@echo "    make bd  SRC=main.cpp                                                     -- Build(Debug)                main.cpp"
 	@echo "    make br  SRC=main.cpp                                                     -- Build(Relase)               main.cpp"
+
+	@echo "    [Run]"
 	@echo "    make rd  SRC=main.cpp                                                     -- Run(Debug)                  main.exe"
 	@echo "    make rr  SRC=main.cpp                                                     -- Run(Relase)                 main.exe"
+
+	@echo "    [Test(Batch)]"
 	@echo "    make tbd SRC=main.cpp                                             TL=3000 -- Batch    Test(Debug)        main.cpp"
 	@echo "    make tbr SRC=main.cpp                                             TL=3000 -- Batch    Test(Relase)       main.cpp"
+	@echo "    [Test(Special)]"
 	@echo "    make tsd SRC=main.cpp                    SRC_JUDGE=main_judge.cpp TL=3000 -- Special  Test(Debug)        main.cpp w/ main_judge.cpp"
 	@echo "    make tsr SRC=main.cpp                    SRC_JUDGE=main_judge.cpp TL=3000 -- Special  Test(Relase)       main.cpp w/ main_judge.cpp"
+	@echo "    [Test(Reactive)]"
 	@echo "    make trd SRC=main.cpp                    SRC_JUDGE=main_judge.cpp TL=3000 -- Reactive Test(Debug)        main.cpp w/ main_judge.cpp"
 	@echo "    make trr SRC=main.cpp                    SRC_JUDGE=main_judge.cpp TL=3000 -- Reactive Test(Relase)       main.cpp w/ main_judge.cpp"
+
+	@echo "    [Hack(Batch)]"
 	@echo "    make hbw SRC=main.cpp SRC_GI=main_gi.cpp SRC_GO=main_go.cpp       TL=3000 -- Generate Batch    Hack(WA)  main.cpp"
 	@echo "    make hbr SRC=main.cpp SRC_GI=main_gi.cpp                          TL=3000 -- Generate Batch    Hack(RE)  main.cpp"
 	@echo "    make hbt SRC=main.cpp SRC_GI=main_gi.cpp                          TL=3000 -- Generate Batch    Hack(TLE) main.cpp"
+	@echo "    [Hack(Special)]"
 	@echo "    make hsw SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Special  Hack(WA)  main.cpp w/ main_judge.cpp"
 	@echo "    make hsr SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Special  Hack(RE)  main.cpp w/ main_judge.cpp"
 	@echo "    make hst SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Special  Hack(TLE) main.cpp w/ main_judge.cpp"
+	@echo "    [Hack(Reactive)]"
 	@echo "    make hrw SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Reactive Hack(WA)  main.cpp w/ main_judge.cpp"
 	@echo "    make hrr SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Reactive Hack(RE)  main.cpp w/ main_judge.cpp"
 	@echo "    make hrt SRC=main.cpp SRC_GI=main_gi.cpp SRC_JUDGE=main_judge.cpp TL=3000 -- Generate Reactive Hack(TLE) main.cpp w/ main_judge.cpp"
+
+	@echo "    [Expand]"
 	@echo "    make e   SRC=main.cpp                                                     -- Bundle                      main.cpp -> main_bundled.cpp"
+
+	@echo "    [Open Testcase]"
+	@echo "    make i{index}                                                             -- Open {index}.in"
+	@echo "    make o{index}                                                             -- Open {index}.out"
+
 	@echo "Variable:"
 	@echo "    SRC       -- Program file          (default: main.cpp)"
 	@echo "    SRC_GI    -- Input generator file  (default: ${BASE}_gi.cpp)"
@@ -64,13 +86,18 @@ help:
 	@echo "    TL        -- Timelimit for program (default: 3000[ms])"
 	@echo "    VERBOSE   -- Verbosity like \"-v\" or \"-vv\" (default: )"
 
-.PHONY: clean_cases
-clean_cases:
+.PHONY: ct
+ct:
 	${RM} ${CASEDIR}/*.txt
 	${RM} ${CASEDIR}/Generated_*
 
-.PHONY: clean
-clean: clean_cases
+.PHONY: cta
+cta: ct
+	${RM} ${CASEDIR}/*.in
+	${RM} ${CASEDIR}/*.out
+
+.PHONY: c
+clean: cta
 	${RM} ${DEBUG_EXE} ${RELEASE_EXE} ${GI_EXE} ${GO_EXE} ${JUDGE_EXE} ${BUNDLED}
 	
 ${DEBUG_EXE}: ${SRC}
@@ -153,3 +180,10 @@ hrt: ${CASEDIR} ${RELEASE_EXE} ${GI_EXE} ${JUDGE_EXE}
 .PHONY: e
 e: ${BUNDLED}
 
+.PHONY: i%
+i%:
+	hx ${CASEDIR}/${@:i%=%}.in
+
+.PHONY: o%
+o%:
+	hx ${CASEDIR}/${@:o%=%}.out

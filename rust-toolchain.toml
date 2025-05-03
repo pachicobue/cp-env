@@ -1,0 +1,11 @@
+[toolchain]
+channel = "1.83.0"
+components = [
+  "rustc",
+  "rustfmt",
+  "cargo",
+  "rust-src",
+  "rust-docs",
+  "rust-analyzer",
+]
+profile = "default"

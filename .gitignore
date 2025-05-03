@@ -1,4 +1,6 @@
 .direnv
 build
+tools/
 !.git/config
 !.git/modules/lib/ac-library
+
