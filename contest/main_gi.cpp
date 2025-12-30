@@ -1,15 +1,14 @@
+#include "utility/md_vec.hpp"
 #include "utility/printer.hpp"
 #include "utility/rng.hpp"
 
 int main() {
-    out.ln(1);
-    const auto N = 200;
+    const auto N = rng.val(3, 3);
     out.ln(N);
-    for (int x : irange(-100, 100)) {
-        for (int y : irange(0, 1)) {
-            out.ln(x, y, 1000);
+    LOOP (N) {
+        LOOP (N) {
+            out.ln(rng.vec(N, 0, 1));
         }
     }
-
     return 0;
 }

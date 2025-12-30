@@ -1,37 +1,35 @@
 {
-  inputs,
   system,
-  perSystem,
-  ...
-}:
-let
+  inputs,
+}: let
   pkgs = import inputs.nixpkgs {
     inherit system;
-    overlays = [ (import inputs.rust-overlay) ];
   };
-  llvm = pkgs.llvmPackages_19;
-  toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
-in
-pkgs.mkShell {
-  # Add build dependencies
-  packages = [
-    toolchain
-    pkgs.python314
-    pkgs.boost
-    pkgs.clang-tools
-    llvm.clang
-    llvm.lldb
-    llvm.libllvm
-
-    perSystem.cp-tools.default
-    perSystem.cp-tools.extra
-  ];
-
-  # Add environment variables
-  env = { };
-
-  # Load custom bash code
-  shellHook = ''
-
+  llvm = pkgs.llvmPackages_latest;
+  clangd-wrapped = pkgs.writeShellScriptBin "clangd" ''
+    exec ${llvm.clang-tools}/bin/clangd \
+      --query-driver="$(echo ${llvm.clang}/bin/clang++)" \
+      "$@"
   '';
+  cpt = inputs.cp-tools.outputs.packages.${system};
+in {
+  default = pkgs.mkShell {
+    packages = [
+      pkgs.python3Minimal
+      pkgs.boost
+      llvm.clang-tools
+      llvm.clang
+      llvm.lldb
+      llvm.libllvm
+
+      clangd-wrapped
+
+      cpt.default
+      cpt.extra
+    ];
+    shellHook = ''
+      alias clangd='${llvm.clang-tools}/bin/clangd --query-driver=$(which clang++)'
+      echo "clangd wrapper loaded with query-driver support"
+    '';
+  };
 }

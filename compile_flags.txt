@@ -1,1 +1,1 @@
-# Workaround for https://github.com/clangd/clangd/issues/1038
+# https://github.com/clangd/clangd/issues/1038 のWorkAround. どうにかしてくれこれ～

@@ -1,42 +1,45 @@
-#include "graph/graph.hpp"
 #include "utility/md_vec.hpp"
+#include "utility/modint.hpp"
 #include "utility/printer.hpp"
 #include "utility/rng.hpp"
 #include "utility/scanner.hpp"
 
 int main() {
-    const auto [N, M] = in.tup<int, int>();
-    const auto [S, T] = in.tup<int, int>(1, 1);
-    Graph G(N);
-    LOOP (M) {
-        const auto [u, v] = in.tup<int, int>(1, 1);
-        G.addEdge(u, v, true);
-    }
-    auto dp = mdVec<int>({N, N}, INF<int>);
-    Queue<Pair<int, int>> Q;
-    dp[S][T] = 0, Q.push({S, T});
-    while (!Q.empty()) {
-        const auto [u, v] = Q.front();
-        Q.pop();
-        for (int nu : G[u]) {
-            if (nu == v) {
-                continue;
-            }
-            if (dp[nu][v] == INF<int>) {
-                dp[nu][v] = dp[u][v] + 1;
-                Q.push({nu, v});
-            }
-        }
-        for (int nv : G[v]) {
-            if (nv == u) {
-                continue;
-            }
-            if (dp[u][nv] == INF<int>) {
-                dp[u][nv] = dp[u][v] + 1;
-                Q.push({u, nv});
+    using mint = modint_998244353;
+    const auto N = in.val<int>();
+    auto Ass = mdVec<mint>({N, N, N});
+    for (int i : rep(N)) {
+        for (int j : rep(N)) {
+            for (int k : rep(N)) {
+                Ass[i][j][k] = in.val<mint>();
             }
         }
     }
-    out.ln(dp[T][S] == INF<int> ? -1 : dp[T][S]);
+    Vec<mint> Ans(N, 0);
+    Vec<int> st;
+    Fix([&](auto self, int t, int x, mint w, Vec<int>& st) -> void {
+        if (t == N) {
+            Ans[x] += w;
+            return;
+        }
+        for (int y : rep(N)) {
+            const mint nw = w * Ass[t][x][y];
+            const int nx = y;
+            st.push_back(x);
+            self(t + 1, nx, nw, st);
+            st.pop_back();
+        }
+        if (!st.empty()) {
+            const int top = st.back();
+            const mint nw = w * Ass[t][x][top];
+            const int nx = (x + top) % N;
+            st.pop_back();
+            self(t + 1, nx, nw, st);
+            st.push_back(top);
+        }
+    })(0, 0, 1, st);
+    for (int i : rep(N)) {
+        out.ln(Ans[i]);
+    }
     return 0;
 }

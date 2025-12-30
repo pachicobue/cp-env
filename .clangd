@@ -1,5 +1,5 @@
 CompileFlags:
-  Add: [-std=c++20, -Wall, -Wextra, -DHOGEPACHI, -Ilib/algolib/src, -Ilib/ac-library]
+  Add: [-std=gnu++23, -Wall, -Wextra, -DHOGEPACHI, -Ilib/algolib/src, -Ilib/ac-library]
   Compiler: clang++
 
 Diagnostics:
